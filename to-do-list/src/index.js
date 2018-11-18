@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import rootReducer from './reducers'
+import rootReducer from './reducers' // index 是 reducer 组合
 import App from './components/App'
 
 import {
@@ -12,7 +12,10 @@ import {
   VisibilityFilters
 } from './actions' // 默认读取 index
 
-const store = createStore(rootReducer)
+const store = createStore(
+  rootReducer, 
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // redux-devtools extension
+)
 
 render(
   <Provider store={store}>
