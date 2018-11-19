@@ -10,6 +10,7 @@
 - [normalizr](https://github.com/paularmstrong/normalizr)
 - [classnames](https://github.com/JedWatson/classnames)
 - [prop-types](https://github.com/airbnb/prop-types)
+- [reselect](https://github.com/reduxjs/reselect)
 
 ## Reference
 
