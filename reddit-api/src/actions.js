@@ -45,7 +45,10 @@ function fetchPosts(subreddit) {
   return dispatch => { // dispatch 方法作为参数传入
     dispatch(requestPosts(subreddit)) // 更新应用的 state 来通知 API 请求发起了
     return fetch(`https://www.reddit.com/r/${subreddit}.json`) // 返回值是一个 Promise
-      .then(response => response.json())
+      .then(
+        response => response.json(),
+        error => console.log(error) // 不要使用 catch，因为会捕获在 dispatch 和渲染中出现的任何错误
+      )
       .then(json => dispatch(receivePosts(subreddit, json))) // 使用 API 请求结果来更新应用的 state
   }
 }
@@ -61,10 +64,16 @@ function shouldFetchPosts(state, subreddit) {
   }
 }
 
+// thunk 的一个优点是它的结果可以再次被 dispatch
 export function fetchPostsIfNeeded(subreddit) {
+  // Note that the function also receives getState() which lets you choose what to dispatch next.
+  // This is useful for avoiding a network request if a cached value is already available.
   return (dispatch, getState) => {
     if (shouldFetchPosts(getState(), subreddit)) {
+      // Dispatch a thunk from thunk
       return dispatch(fetchPosts(subreddit))
+    } else {
+      return Promise.resolve()
     }
   }
 }
