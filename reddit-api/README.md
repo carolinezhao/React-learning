@@ -1,4 +1,4 @@
-# Project: Reddit API
+# Async
 
 ## 异步 Action
 
@@ -26,3 +26,46 @@
 - 像 redux-thunk 或 redux-promise 这样支持异步的 middleware 都包装了 store 的 dispatch() 方法，从而可以 dispatch 除了 action 以外的内容，比如函数或 Promise。
 - 每个 middleware 都以自己的方式解析 dispatch 的内容，并继续传递 actions 给下一个 middleware。比如，支持 Promise 的 middleware 能够拦截 Promise，然后为每个 Promise 异步地 dispatch 一对 begin/end actions。
 - 当 middleware 链中的最后一个 middleware 开始 dispatch action 时，这个 action 必须是一个普通对象，来将处理流程带回同步方式。
+
+redux 的原始数据流：
+
+`UI —> action(plain) —> reducer —> state —> UI`
+
+增加中间件处理副作用后的数据流：
+
+`UI —> action(side function) —> middleware —> action(plain) —> reducer —> state —> UI`
+
+中间件的作用：转换异步操作，生成原始 action。
+
+## redux-thunk
+
+thunk
+- It’s a special name for a function that’s returned by another.
+
+redux-thunk
+- It’s a middleware that looks at every action that passes through the system, and if it’s a function, it calls that function.
+
+Redux will pass two arguments to thunk functions:
+- dispatch, so that they can dispatch new actions if they need to;
+- getState, so they can access the current state. 
+
+The getState function can be useful for deciding whether to fetch new data, or return a cached result, depending on the current state.
+
+源码
+```js
+function createThunkMiddleware(extraArgument) {
+  return ({ dispatch, getState }) => next => action => {
+    if (typeof action === 'function') {
+      return action(dispatch, getState, extraArgument);
+    }
+
+    return next(action);
+  };
+}
+```
+
+## reference
+
+- Redux 文档
+- [What is a thunk](https://daveceddia.com/what-is-a-thunk/)
+- [redux-thunk 的缺点及替代品](https://juejin.im/post/5b440f7ae51d45195759f345)
