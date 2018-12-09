@@ -1,8 +1,6 @@
 import React from 'react'
-import {cleanup, render, fireEvent} from 'react-testing-library'
+import {render, fireEvent} from 'react-testing-library'
 import Todo from '../components/Todo'
-
-afterEach(cleanup)
 
 test('Todo should render passed props as content body and respond to callback props', () => {
   const onClick = jest.fn()
