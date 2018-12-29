@@ -1,3 +1,5 @@
+import has from 'lodash'
+
 // splitting reducers by keys
 
 // two arguments
@@ -20,4 +22,16 @@ export default createByKey
 
 export const createGetByKey = mapFilterToKey => {
   return (state, filter) => state[mapFilterToKey(filter)]
+}
+
+// splitting by a filterQuery
+
+export const createByFilterQuery = filterQueryKey => {
+  const predicate = action => has(action, `filterQuery.${filterQueryKey}`)
+  const mapActionToKey = action => action.filterQuery[filterQueryKey]
+  return createByKey(predicate, mapActionToKey)
+}
+
+export const createGetByFilterQuery = filterQueryKey => {
+  return createGetByKey(({ filterQuery }) => filterQuery[filterQueryKey])
 }
