@@ -11,6 +11,8 @@ class Loadmore extends Component {
     };
   }
 
+  // use the scrollTop property of the element to get the scroll position (which is relative to the top of the window) and then add it to the clientHeight property (the height of the document)
+
   componentDidMount() {
     this.refs.myscroll.addEventListener("scroll", () => {
       if (
@@ -36,6 +38,8 @@ class Loadmore extends Component {
       this.setState({ items: this.state.items + 5, loading: false });
     }, 1000);
   }
+
+  // there is a reference to the div called myscroll which makes it possible to access the element in React using this.refs.myscroll
 
   render() {
     return (
